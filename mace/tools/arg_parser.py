@@ -5,6 +5,7 @@
 ###########################################################################################
 
 import argparse
+import math
 from typing import Optional
 
 
@@ -54,6 +55,7 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
             "TotalRMSE",
             "PerAtomRMSEstressvirials",
             "PerAtomMAE",
+            "PerAtomMAEstress",
             "TotalMAE",
             "DipoleRMSE",
             "DipoleMAE",
@@ -309,9 +311,11 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         choices=[
             "ef",
             "weighted",
+            "weighted-l1",
             "forces_only",
             "virials",
             "stress",
+            "stress-l1",
             "dipole",
             "energy_forces_dipole",
         ],
@@ -459,7 +463,7 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--restart_lr",
         help="restart optimizer with given learning rate",
-        action="store_true",
+        type=float,
         default=None,
     )
     parser.add_argument(

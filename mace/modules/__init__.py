@@ -24,7 +24,9 @@ from .loss import (
     EnergyForcesLoss,
     WeightedEnergyForcesDipoleLoss,
     WeightedEnergyForcesLoss,
+    WeightedEnergyForcesLossL1,
     WeightedEnergyForcesStressLoss,
+    WeightedEnergyForcesStressLossL1,
     WeightedEnergyForcesVirialsLoss,
     WeightedForcesLoss,
 )

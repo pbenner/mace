@@ -156,7 +156,13 @@ def get_loss_fn(loss: str,
                 compute_dipole: bool) -> torch.nn.Module:
     if loss == "weighted":
         loss_fn = modules.WeightedEnergyForcesLoss(
-            energy_weight=energy_weight, forces_weight=forces_weight
+            energy_weight=energy_weight,
+            forces_weight=forces_weight,
+        )
+    elif loss == "weighted-l1":
+        loss_fn = modules.WeightedEnergyForcesLossL1(
+            energy_weight=energy_weight,
+            forces_weight=forces_weight,
         )
     elif loss == "forces_only":
         loss_fn = modules.WeightedForcesLoss(forces_weight=forces_weight)
@@ -168,6 +174,12 @@ def get_loss_fn(loss: str,
         )
     elif loss == "stress":
         loss_fn = modules.WeightedEnergyForcesStressLoss(
+            energy_weight=energy_weight,
+            forces_weight=forces_weight,
+            stress_weight=stress_weight,
+        )
+    elif loss == "stress-l1":
+        loss_fn = modules.WeightedEnergyForcesStressLossL1(
             energy_weight=energy_weight,
             forces_weight=forces_weight,
             stress_weight=stress_weight,

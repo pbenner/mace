@@ -157,6 +157,13 @@ def train(
                     logging.info(
                         f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A"
                     )
+                elif log_errors == "PerAtomMAEstress":
+                    error_e = eval_metrics["mae_e_per_atom"] * 1e3
+                    error_f = eval_metrics["mae_f"] * 1e3
+                    error_stress = eval_metrics["mae_stress_per_atom"] * 1e3
+                    logging.info(
+                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A, MAE_S_per_atom={error_stress:.1f} meV / A^3"
+                    )
                 elif log_errors == "TotalMAE":
                     error_e = eval_metrics["mae_e"] * 1e3
                     error_f = eval_metrics["mae_f"] * 1e3
@@ -409,6 +416,7 @@ class MACELoss(Metric):
             delta_stress = self.convert(self.delta_stress)
             delta_stress_per_atom = self.convert(self.delta_stress_per_atom)
             aux["mae_stress"] = compute_mae(delta_stress)
+            aux["mae_stress_per_atom"] = compute_mae(delta_stress_per_atom)
             aux["rmse_stress"] = compute_rmse(delta_stress)
             aux["rmse_stress_per_atom"] = compute_rmse(delta_stress_per_atom)
             aux["q95_stress"] = compute_q95(delta_stress)
