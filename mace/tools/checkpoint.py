@@ -135,7 +135,7 @@ class CheckpointHandler:
         self.old_path = path
 
         logging.debug(f"Saving checkpoint: {path}")
-        self.accelerator.save_state(path)
+        self.accelerator.save_state(path, safe_serialization=False)
 
     def load_latest(self, swa: Optional[bool] = False):
 

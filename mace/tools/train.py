@@ -17,6 +17,7 @@ from torch.utils.data import DataLoader
 from torch_ema import ExponentialMovingAverage
 from torchmetrics import Metric
 from accelerate import Accelerator
+from tqdm import tqdm
 
 from . import torch_geometric
 from .checkpoint import CheckpointHandler
@@ -162,7 +163,7 @@ def train(
                     error_f = eval_metrics["mae_f"] * 1e3
                     error_stress = eval_metrics["mae_stress_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A, MAE_S_per_atom={error_stress:.1f} meV / A^3"
+                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A, MAE_S_per_atom={error_stress:.5f} meV / A^3"
                     )
                 elif log_errors == "TotalMAE":
                     error_e = eval_metrics["mae_e"] * 1e3
@@ -237,7 +238,7 @@ def train_one_epoch(
     logger: MetricsLogger,
 ) -> None:
 
-    for batch in data_loader:
+    for batch in tqdm(data_loader):
         _, opt_metrics = take_step(
             accelerator=accelerator,
             model=model,
