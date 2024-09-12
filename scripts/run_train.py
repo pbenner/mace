@@ -328,6 +328,10 @@ def main() -> None:
     else:
         raise RuntimeError(f"Unknown model: '{args.model}'")
 
+    if args.load_model is not None:
+        print(f'Loading model from {args.load_model}...')
+        model = torch.load(args.load_model)
+
     # Optimizer
     decay_interactions = {}
     no_decay_interactions = {}
@@ -476,7 +480,7 @@ def main() -> None:
     if args.ema:
         ema = ExponentialMovingAverage(model.parameters(), decay=args.ema_decay)
 
-    logging.info(model)
+    #logging.info(model)
     logging.info(f"Number of parameters: {tools.count_parameters(model)}")
     logging.info(f"Optimizer: {optimizer}")
 

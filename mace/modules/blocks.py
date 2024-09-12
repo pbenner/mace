@@ -237,7 +237,7 @@ class InteractionBlock(torch.nn.Module):
         raise NotImplementedError
 
 
-nonlinearities = {1: torch.nn.functional.silu, -1: torch.tanh}
+nonlinearities = {1: torch.nn.functional.elu, -1: torch.tanh}
 
 
 @compile_mode("script")
@@ -358,7 +358,7 @@ class AgnosticNonlinearInteractionBlock(InteractionBlock):
         input_dim = self.edge_feats_irreps.num_irreps
         self.conv_tp_weights = nn.FullyConnectedNet(
             [input_dim] + 3 * [64] + [self.conv_tp.weight_numel],
-            torch.nn.functional.silu,
+            torch.nn.functional.elu,
         )
 
         # Linear
@@ -425,7 +425,7 @@ class AgnosticResidualNonlinearInteractionBlock(InteractionBlock):
         input_dim = self.edge_feats_irreps.num_irreps
         self.conv_tp_weights = nn.FullyConnectedNet(
             [input_dim] + 3 * [64] + [self.conv_tp.weight_numel],
-            torch.nn.functional.silu,
+            torch.nn.functional.elu,
         )
 
         # Linear
@@ -495,7 +495,7 @@ class RealAgnosticInteractionBlock(InteractionBlock):
         input_dim = self.edge_feats_irreps.num_irreps
         self.conv_tp_weights = nn.FullyConnectedNet(
             [input_dim] + 3 * [64] + [self.conv_tp.weight_numel],
-            torch.nn.functional.silu,
+            torch.nn.functional.elu,
         )
 
         # Linear
@@ -567,7 +567,7 @@ class RealAgnosticResidualInteractionBlock(InteractionBlock):
         input_dim = self.edge_feats_irreps.num_irreps
         self.conv_tp_weights = nn.FullyConnectedNet(
             [input_dim] + 3 * [64] + [self.conv_tp.weight_numel],
-            torch.nn.functional.silu,
+            torch.nn.functional.elu,
         )
 
         # Linear

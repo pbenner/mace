@@ -124,7 +124,7 @@ def train(
                     error_e = eval_metrics["rmse_e_per_atom"] * 1e3
                     error_f = eval_metrics["rmse_f"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A"
                     )
                 elif (
                     log_errors == "PerAtomRMSEstressvirials"
@@ -134,7 +134,7 @@ def train(
                     error_f = eval_metrics["rmse_f"] * 1e3
                     error_stress = eval_metrics["rmse_stress_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_stress_per_atom={error_stress:.1f} meV / A^3"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_stress_per_atom={error_stress:.1f} meV / A^3"
                     )
                 elif (
                     log_errors == "PerAtomRMSEstressvirials"
@@ -144,44 +144,44 @@ def train(
                     error_f = eval_metrics["rmse_f"] * 1e3
                     error_virials = eval_metrics["rmse_virials_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_virials_per_atom={error_virials:.1f} meV"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_virials_per_atom={error_virials:.1f} meV"
                     )
                 elif log_errors == "TotalRMSE":
                     error_e = eval_metrics["rmse_e"] * 1e3
                     error_f = eval_metrics["rmse_f"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_E={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_E={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A"
                     )
                 elif log_errors == "PerAtomMAE":
                     error_e = eval_metrics["mae_e_per_atom"] * 1e3
                     error_f = eval_metrics["mae_f"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A"
                     )
                 elif log_errors == "PerAtomMAEstress":
                     error_e = eval_metrics["mae_e_per_atom"] * 1e3
                     error_f = eval_metrics["mae_f"] * 1e3
                     error_stress = eval_metrics["mae_stress_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A, MAE_S_per_atom={error_stress:.5f} meV / A^3"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, MAE_E_per_atom={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A, MAE_S_per_atom={error_stress:.5f} meV / A^3"
                     )
                 elif log_errors == "TotalMAE":
                     error_e = eval_metrics["mae_e"] * 1e3
                     error_f = eval_metrics["mae_f"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, MAE_E={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, MAE_E={error_e:.1f} meV, MAE_F={error_f:.1f} meV / A"
                     )
                 elif log_errors == "DipoleRMSE":
                     error_mu = eval_metrics["rmse_mu_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_MU_per_atom={error_mu:.2f} mDebye"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_MU_per_atom={error_mu:.2f} mDebye"
                     )
                 elif log_errors == "EnergyDipoleRMSE":
                     error_e = eval_metrics["rmse_e_per_atom"] * 1e3
                     error_f = eval_metrics["rmse_f"] * 1e3
                     error_mu = eval_metrics["rmse_mu_per_atom"] * 1e3
                     logging.info(
-                        f"Epoch {epoch}: loss={valid_loss:.4f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_Mu_per_atom={error_mu:.2f} mDebye"
+                        f"Epoch {epoch}: loss={valid_loss:.8f}, RMSE_E_per_atom={error_e:.1f} meV, RMSE_F={error_f:.1f} meV / A, RMSE_Mu_per_atom={error_mu:.2f} mDebye"
                     )
                 if log_wandb:
                     wandb_log_dict = {

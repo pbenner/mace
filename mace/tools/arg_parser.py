@@ -153,8 +153,8 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         "--gate",
         help="non linearity for last readout",
         type=str,
-        default="silu",
-        choices=["silu", "tanh", "abs", "None"],
+        default="elu",
+        choices=["elu", "tanh", "abs", "None"],
     )
     parser.add_argument(
         "--scaling",
@@ -215,6 +215,13 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
     parser.add_argument(
         "--test_dir",
         help="Path to directory with test files named as test_*.h5",
+        type=str,
+        default=None,
+        required=False,
+    )
+    parser.add_argument(
+        "--load_model",
+        help="Load model before training",
         type=str,
         default=None,
         required=False,
@@ -316,6 +323,7 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
             "virials",
             "stress",
             "stress-l1",
+            "huber",
             "dipole",
             "energy_forces_dipole",
         ],

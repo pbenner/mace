@@ -184,6 +184,12 @@ def get_loss_fn(loss: str,
             forces_weight=forces_weight,
             stress_weight=stress_weight,
         )
+    elif loss == "huber":
+        loss_fn = modules.WeightedHuberEnergyForcesStressLoss(
+            energy_weight=energy_weight,
+            forces_weight=forces_weight,
+            stress_weight=stress_weight,
+        )
     elif loss == "dipole":
         assert (
             dipole_only is True

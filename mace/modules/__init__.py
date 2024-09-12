@@ -27,6 +27,7 @@ from .loss import (
     WeightedEnergyForcesLossL1,
     WeightedEnergyForcesStressLoss,
     WeightedEnergyForcesStressLossL1,
+    WeightedHuberEnergyForcesStressLoss,
     WeightedEnergyForcesVirialsLoss,
     WeightedForcesLoss,
 )
@@ -66,7 +67,7 @@ scaling_classes: Dict[str, Callable] = {
 gate_dict: Dict[str, Optional[Callable]] = {
     "abs": torch.abs,
     "tanh": torch.tanh,
-    "silu": torch.nn.functional.silu,
+    "elu": torch.nn.functional.elu,
     "None": None,
 }
 
@@ -96,6 +97,8 @@ __all__ = [
     "WeightedEnergyForcesStressLoss",
     "DipoleSingleLoss",
     "WeightedEnergyForcesDipoleLoss",
+    "WeightedEnergyForcesStressLossL1",
+    "WeightedHuberEnergyForcesStressLoss",
     "SymmetricContraction",
     "interaction_classes",
     "compute_mean_std_atomic_inter_energy",
