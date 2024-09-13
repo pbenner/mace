@@ -185,6 +185,7 @@ def main() -> None:
         args.loss,
         args.energy_weight,
         args.forces_weight,
+        args.angle_weight,
         args.stress_weight,
         args.virials_weight,
         args.dipole_weight,

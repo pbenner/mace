@@ -149,6 +149,7 @@ def get_atomic_energies(E0s, train_collection, z_table)->dict:
 def get_loss_fn(loss: str,
                 energy_weight: float,
                 forces_weight: float,
+                angle_weight: float,
                 stress_weight: float,
                 virials_weight: float,
                 dipole_weight: float,
@@ -163,6 +164,12 @@ def get_loss_fn(loss: str,
         loss_fn = modules.WeightedEnergyForcesLossL1(
             energy_weight=energy_weight,
             forces_weight=forces_weight,
+        )
+    elif loss == "angle-l1":
+        loss_fn = modules.AngleEnergyForcesLossL1(
+            energy_weight=energy_weight,
+            forces_weight=forces_weight,
+            angle_weight=angle_weight,
         )
     elif loss == "forces_only":
         loss_fn = modules.WeightedForcesLoss(forces_weight=forces_weight)

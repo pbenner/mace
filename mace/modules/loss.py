@@ -9,6 +9,15 @@ import torch
 from mace.tools import TensorDict
 from mace.tools.torch_geometric import Batch
 
+def compute_angle(s, t, n1 = None, n2 = None, epsilon=1e-8):
+    if n1 is None:
+        n1 = torch.norm(s, dim=1)
+    if n2 is None:
+        n2 = torch.norm(t, dim=1)
+    # Compute dot product between force vectors
+    dp = torch.einsum('ij,ij->i', s, t)
+    # Compute angle
+    return torch.arccos((dp + epsilon) / (n1*n2 + epsilon))
 
 def mean_squared_error_energy(ref: Batch, pred: TensorDict) -> torch.Tensor:
     # energy: [n_graphs, ]
@@ -117,6 +126,31 @@ def mean_absolute_error_forces(ref: Batch, pred: TensorDict) -> torch.Tensor:
         * torch.abs(ref["forces"] - pred["forces"])
     )  # []
 
+def angle_norm_error_forces(ref: Batch, pred: TensorDict, angle_weight: float) -> torch.Tensor:
+    # forces: [n_atoms, 3]
+    configs_weight = torch.repeat_interleave(
+        ref.weight, ref.ptr[1:] - ref.ptr[:-1]
+    ).unsqueeze(
+        -1
+    )  # [n_atoms, 1]
+    configs_forces_weight = torch.repeat_interleave(
+        ref.forces_weight, ref.ptr[1:] - ref.ptr[:-1]
+    ).unsqueeze(
+        -1
+    )  # [n_atoms, 1]
+    # Compute norms
+    n1 = torch.norm(ref ["forces"], dim=1)
+    n2 = torch.norm(pred["forces"], dim=1)
+    # Compute angle
+    angle = compute_angle(ref["forces"], pred["forces"], n1=n1, n2=n2)
+    # Compute loss
+    return torch.mean(
+        configs_weight
+        * configs_forces_weight
+        * (torch.abs(n1 - n2) + angle_weight*angle)
+    )  # []
+
+
 def weighted_mean_squared_error_dipole(ref: Batch, pred: TensorDict) -> torch.Tensor:
     # dipole: [n_graphs, ]
     num_atoms = (ref.ptr[1:] - ref.ptr[:-1]).unsqueeze(-1)  # [n_graphs,1]
@@ -197,6 +231,35 @@ class WeightedEnergyForcesLossL1(torch.nn.Module):
         return (
             f"{self.__class__.__name__}(energy_weight={self.energy_weight:.3f}, "
             f"forces_weight={self.forces_weight:.3f})"
+        )
+
+class AngleEnergyForcesLossL1(torch.nn.Module):
+    def __init__(self, energy_weight=1.0, forces_weight=1.0, angle_weight=1.0) -> None:
+        super().__init__()
+        self.register_buffer(
+            "energy_weight",
+            torch.tensor(energy_weight, dtype=torch.get_default_dtype()),
+        )
+        self.register_buffer(
+            "forces_weight",
+            torch.tensor(forces_weight, dtype=torch.get_default_dtype()),
+        )
+        self.register_buffer(
+            "angle_weight",
+            torch.tensor(angle_weight, dtype=torch.get_default_dtype()),
+        )
+
+    def forward(self, ref: Batch, pred: TensorDict) -> torch.Tensor:
+        return self.energy_weight * weighted_mean_squared_error_energy(
+            ref, pred
+        ) + self.forces_weight * angle_norm_error_forces(ref, pred, self.angle_weight)
+
+    def __repr__(self):
+        return (
+            f"{self.__class__.__name__}"
+            f"(energy_weight={self.energy_weight:.3f}, "
+            f"forces_weight={self.forces_weight:.3f}, "
+            f"angle_weight={self.angle_weight:.3f})"
         )
 
 class WeightedForcesLoss(torch.nn.Module):
