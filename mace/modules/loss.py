@@ -16,8 +16,8 @@ def compute_angle(s, t, n1 = None, n2 = None, epsilon=1e-8):
         n2 = torch.norm(t, dim=1)
     # Compute dot product between force vectors
     dp = torch.einsum('ij,ij->i', s, t)
-    # Compute angle
-    return torch.arccos((dp + epsilon) / (n1*n2 + epsilon))
+    # Compute angle, use tanh for numerical stability
+    return torch.arccos(torch.tanh((dp + epsilon) / (n1*n2 + epsilon)))
 
 def mean_squared_error_energy(ref: Batch, pred: TensorDict) -> torch.Tensor:
     # energy: [n_graphs, ]
