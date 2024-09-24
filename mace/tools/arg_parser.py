@@ -153,8 +153,8 @@ def build_default_arg_parser() -> argparse.ArgumentParser:
         "--gate",
         help="non linearity for last readout",
         type=str,
-        default="elu",
-        choices=["elu", "tanh", "abs", "None"],
+        default="silu",
+        choices=["silu", "tanh", "abs", "None"],
     )
     parser.add_argument(
         "--scaling",

@@ -68,7 +68,7 @@ scaling_classes: Dict[str, Callable] = {
 gate_dict: Dict[str, Optional[Callable]] = {
     "abs": torch.abs,
     "tanh": torch.tanh,
-    "elu": torch.nn.functional.elu,
+    "silu": torch.nn.functional.silu,
     "None": None,
 }
 
